@@ -20,6 +20,7 @@ const Login: React.FC = () => {
 
   const intl = useIntl();
 
+
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
