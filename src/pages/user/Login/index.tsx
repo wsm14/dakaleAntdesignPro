@@ -31,6 +31,7 @@ const Login: React.FC = () => {
     }
   };
 
+  // 获取导航
   const fetchMenuList = async () => {
     const menuList = await initialState?.fetchMenu?.();
     if (menuList) {
