@@ -1,15 +1,47 @@
+import { useRef, useEffect, useState } from 'react';
 import { getList } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
-import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
+import { useRequest } from "ahooks"
 import { Button } from 'antd';
-import { useRef } from 'react';
 
-const index = () => {
+const Index = () => {
+  const [dataList, setDataList] = useState([])
   const actionRef = useRef<ActionType>();
+  const { error, loading } = useRequest(getList, {
+    defaultParams: {
+      page: 1,
+      limit: 10
+    },
+    onSuccess: (result, params) => {
+      setDataList(result.content.supplierDetailList)
+      console.log(result, params, "obj")
+    },
+  });
+
+  useEffect(() => {
+
+  }, [])
+
+  const valueEnum = {
+    all: { text: '全部', status: 'Default' },
+    running: { text: '运行中', status: 'Processing' },
+    online: { text: '已上线', status: 'Success' },
+    error: { text: '异常', status: 'Error' },
+  };
   const columns: ProColumns[] = [
     {
       title: '供应商名称',
       dataIndex: 'name',
+    },
+    {
+      title: '状态',
+      valueType: 'select',
+      dataIndex: 'status',
+      // initialValue: ['all'],
+      width: 100,
+      valueEnum,
     },
     {
       title: '主营类目',
@@ -22,7 +54,7 @@ const index = () => {
     },
   ];
 
-  const handleGet = async () => {};
+  const handleGet = async () => { };
 
   const handleClick = () => {
     console.log(actionRef.current);
@@ -33,25 +65,22 @@ const index = () => {
       columns={columns}
       options={false}
       actionRef={actionRef}
-      search={
-        {
-          // optionRe nder: false,
-          // collapsed: false,
-        }
-      }
       rowKey="id"
-      request={async (params = {}, sort, filter) => {
-        const { current, pageSize } = params;
-        const msg = await getList({
-          page: current,
-          limit: pageSize,
-        });
-        return {
-          data: msg.content.supplierDetailList,
-          success: msg.success,
-          total: msg.content.total,
-        };
-      }}
+      dataSource={dataList}
+      // request={async (params = {}, sort) => {
+      //   const { current, pageSize, ...other } = params;
+      //   const msg = await getList({
+      //     page: current,
+      //     limit: pageSize,
+      //     ...other
+      //   });
+      //   return {
+      //     data: msg.content.supplierDetailList,
+      //     success: msg.success,
+      //     total: msg.content.total,
+      //   };
+      // }}
+      loading={loading}
       revalidateOnFocus={false}
       pagination={{
         pageSize: 10,
@@ -65,8 +94,8 @@ const index = () => {
           刷新
         </Button>,
       ]}
-    ></ProTable>
+    />
   );
 };
 
-export default index;
+export default Index;

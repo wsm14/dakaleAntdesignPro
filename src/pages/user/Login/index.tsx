@@ -8,23 +8,12 @@ import {
   WeiboCircleOutlined,
 } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
-import { Alert, message } from 'antd';
+import { message } from 'antd';
 import React from 'react';
 import { FormattedMessage, history, SelectLang, useIntl, useModel } from 'umi';
 import styles from './index.less';
 
-const LoginMessage: React.FC<{
-  content: string;
-}> = ({ content }) => (
-  <Alert
-    style={{
-      marginBottom: 24,
-    }}
-    message={content}
-    type="error"
-    showIcon
-  />
-);
+
 
 const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -67,9 +56,9 @@ const Login: React.FC = () => {
         if (!history) return;
         const { query } = history.location;
         const { redirect } = query as { redirect: string };
+        console.log(redirect)
         history.push(redirect || '/');
         fetchMenuList();
-        console.log(1111);
         return;
       }
       // 如果失败去设置用户错误信息
@@ -90,22 +79,7 @@ const Login: React.FC = () => {
       </div>
       <div className={styles.content}>
         <LoginForm
-          logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
-          subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
-          initialValues={{
-            autoLogin: true,
-          }}
-          actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-            <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-            <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
-          ]}
+          // title="登录"
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
@@ -114,7 +88,7 @@ const Login: React.FC = () => {
             name="mobile"
             fieldProps={{
               size: 'large',
-              prefix: <UserOutlined className={styles.prefixIcon} />,
+              // prefix: <UserOutlined className={styles.prefixIcon} />,
             }}
             placeholder={intl.formatMessage({
               id: 'pages.login.username.placeholder',
@@ -136,7 +110,7 @@ const Login: React.FC = () => {
             name="password"
             fieldProps={{
               size: 'large',
-              prefix: <LockOutlined className={styles.prefixIcon} />,
+              // prefix: <LockOutlined className={styles.prefixIcon} />,
             }}
             placeholder={intl.formatMessage({
               id: 'pages.login.password.placeholder',
