@@ -2,39 +2,28 @@ import { useRef, useEffect, useState } from 'react';
 import { getList } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { history } from "umi"
 import { ProTable } from '@ant-design/pro-components';
 import { useRequest } from "ahooks"
 import { Button } from 'antd';
 
 const Index = () => {
   const [dataList, setDataList] = useState([])
-
   const actionRef = useRef<ActionType>();
 
-  const { loading, run, runAsync, refresh } = useRequest(getList, {
-    manual: true,
-    // defaultParams: {
-    //   page: 1,
-    //   limit: 10
-    // },
+  const { error, loading } = useRequest(getList, {
+    defaultParams: {
+      page: 1,
+      limit: 10
+    },
     onSuccess: (result, params) => {
-      // setDataList(result.content.supplierDetailList)
+      setDataList(result.content.supplierDetailList)
       console.log(result, params, "obj")
-      return {
-        data: result.content.supplierDetailList,
-        success: result.success,
-        total: result.content.total,
-      }
     },
   });
 
-  // useEffect(() => {
-  //   run({
-  //     page: 1,
-  //     limit: 10
-  //   })
-  // }, [])
+  useEffect(() => {
+
+  }, [])
 
   const valueEnum = {
     all: { text: '全部', status: 'Default' },
@@ -69,6 +58,7 @@ const Index = () => {
   const handleGet = async () => { };
 
   const handleClick = () => {
+    console.log(actionRef.current);
     actionRef.current?.reload();
   };
   return (
@@ -77,7 +67,7 @@ const Index = () => {
       options={false}
       actionRef={actionRef}
       rowKey="id"
-      // dataSource={dataList}
+      dataSource={dataList}
       // request={async (params = {}, sort) => {
       //   const { current, pageSize, ...other } = params;
       //   const msg = await getList({
@@ -91,44 +81,14 @@ const Index = () => {
       //     total: msg.content.total,
       //   };
       // }}
-      request={async (params = {},) => {
-        const { current, pageSize, ...other } = params;
-        // return Promise.resolve(getNum())
-        // console.log(run({ page: current, limit: pageSize, ...other }), getNum())
-        return runAsync({ page: current, limit: pageSize, ...other }).then(res => {
-          return {
-            data: res.content.supplierDetailList,
-            success: res.success,
-            total: res.content.total,
-          }
-        })
-      }}
-      search={{
-        defaultCollapsed: false,
-        optionRender: (searchConfig, formProps, dom) => {
-          return [
-            dom[1],
-            // ...dom.reverse(),
-            <Button
-              key="out"
-              onClick={() => {
-                refresh()
-              }}
-            >
-              导出
-            </Button>,
-          ]
-        }
-      }}
-      // loading={loading}
+      loading={loading}
       revalidateOnFocus={false}
       pagination={{
         pageSize: 10,
+        onChange: (page) => console.log(page),
       }}
       toolBarRender={() => [
-        <Button key="button" icon={<PlusOutlined />} type="primary" onClick={() => {
-          history.push('/SCM/supplierSettlement/edit')
-        }}>
+        <Button key="button" icon={<PlusOutlined />} type="primary" onClick={handleGet}>
           新建
         </Button>,
         <Button key="button" icon={<PlusOutlined />} type="primary" onClick={handleClick}>
