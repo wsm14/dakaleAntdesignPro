@@ -58,6 +58,7 @@ const Login: React.FC = () => {
         if (!history) return;
         const { query } = history.location;
         const { redirect } = query as { redirect: string };
+        console.log(redirect)
         history.push(redirect || '/');
         fetchMenuList();
         return;
