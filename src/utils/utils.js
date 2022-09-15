@@ -123,7 +123,6 @@ function getStr(obj) {
 }
 // 数据ASCII 排序
 function sort(obj) {
-  console.log(obj,"obj")
   if (window.sessionStorage.getItem('token')) {
     obj.token = window.sessionStorage.getItem('token');
   }
@@ -136,13 +135,11 @@ function sort(obj) {
     }
   }
   //排序
-  console.log(newArr)
   newArr = newArr.sort();
   newArr.forEach(function (key) {
     key && obj[key] !== undefined && obj[key] !== null && (newObj[key] = obj[key]);
   });
   newArr = null;
-  console.log(newObj)
   return newObj;
 }
 // 处理完成后返回加密数据
