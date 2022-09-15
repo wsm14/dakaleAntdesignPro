@@ -23,7 +23,12 @@
     path: '/SCM/supplierSettlement',
     name: 'supplierSettlement',
     icon: 'smile',
-    component: './SCM/index',
+    component: './SCM/SupplierSettlement/index',
+  },
+  {
+    path: '/SCM/supplierSettlement/edit',
+    name: 'edit',
+    component: './SCM/SupplierSettlement/edit',
   },
   {
     path: '/admin',
